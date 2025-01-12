@@ -1,0 +1,32 @@
+version: "3"
+services:
+  web:
+    container_name: remiseria-sudamericana-spring_v2
+    build: .
+    ports:
+      - 8080:8080
+    links:
+      - mysql
+    volumes:
+      - .:/usr/src/app
+  mysql:
+    container_name: remiseria-sudamericana-mysql_v2
+    image: mysql:8.0.13
+    ports:
+      - 3307:3306
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: remiseria
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/var/lib/mysql
+  phpmyadmin:
+    container_name: phpmyadmin-remiseria_v2
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql:db
+    ports:
+      - 8081:80
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
